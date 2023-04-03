@@ -2,7 +2,6 @@
 #include "Temperature.cpp"
 #include "Tree.h"
 
-
 void ex1() {
     int a = 300_Kelvin;
     int b = 120_Fahrenheit;
@@ -32,7 +31,6 @@ void ex2() {
     tree.insert(tree.rootNode->childrenNodes[0], 1, 900);
 
 
-
     auto sortCallback = [](Node<int> *a, Node<int> *b) -> bool {
         if (a->data < b->data) return true;
         return false;
@@ -40,8 +38,19 @@ void ex2() {
 
     tree.sort(tree.rootNode, sortCallback);
 
+    auto findCallback = [](int data, Node<int> *node) -> bool {
+        if (node->data == data) return true;
+        return false;
+    };
+
+    auto foundNode = tree.find(455, findCallback);
+
+    std::cout << foundNode->data<<std::endl;
+
     tree.delete_node(tree.rootNode->childrenNodes[0]);
+
     std::cout << tree.count(nullptr);
+
 }
 
 int main() {

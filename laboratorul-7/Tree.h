@@ -29,8 +29,6 @@ public:
     }
 
     ~Node() {
-        std::cout << "Destructor" << std::endl;
-
         for (int i = 0; i < childrenCount; i++)
             delete childrenNodes[i];
 
@@ -40,6 +38,20 @@ public:
 
 template<typename T>
 class Tree {
+private:
+    Node<T> *dfs(T data, Node<T> *node, bool (*callback)(T, Node<T> *)) {
+        if(callback(data,node))
+            return node;
+
+        for (int i = 0; i < node->childrenCount; i++) {
+            Node<T> *result = dfs(data, node->childrenNodes[i], callback);
+            if (result != nullptr)
+                return result;
+        }
+
+        return nullptr;
+    }
+
 public:
     Node<T> *rootNode = nullptr;
 
@@ -114,11 +126,15 @@ public:
         delete node;
     }
 
-    void sort(Node<T> *node, bool (*fn)(Node<T> *, Node<T> *)) {
+    void sort(Node<T> *node, bool (*callback)(Node<T> *, Node<T> *)) {
         for (int i = 0; i < node->childrenCount - 1; i++) {
             for (int j = 0; j < node->childrenCount - i - 1; j++)
-                if (fn(node->childrenNodes[i], node->childrenNodes[i + 1]))
+                if (callback(node->childrenNodes[i], node->childrenNodes[i + 1]))
                     std::swap(node->childrenNodes[i], node->childrenNodes[i + 1]);
         }
+    }
+
+    Node<T> *find(T data, bool (*callback)(T, Node<T> *)) {
+        return dfs(data, rootNode, callback);
     }
 };
