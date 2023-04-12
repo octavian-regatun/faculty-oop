@@ -40,7 +40,7 @@ template<typename T>
 class Tree {
 private:
     Node<T> *dfs(T data, Node<T> *node, bool (*callback)(T, Node<T> *)) {
-        if(callback(data,node))
+        if (callback(data, node))
             return node;
 
         for (int i = 0; i < node->childrenCount; i++) {
